@@ -81,9 +81,7 @@ public class Oxygen49Extension extends ControllerExtension
     // Returns true if the given index is in the device's cc range or false if not
     private Boolean isIndexInDeviceCCRange( int index )
     {
-        Boolean b = index >= CC.DEVICE_START_CC && index <= CC.DEVICE_END_CC;
-        getHost().showPopupNotification("isIndexInDeviceCCRange(" + index + ") = " + b.toString());
-        return b;
+        return index >= CC.DEVICE_START_CC && index <= CC.DEVICE_END_CC;
     }
     
     // Returns the user index from the given cc value
