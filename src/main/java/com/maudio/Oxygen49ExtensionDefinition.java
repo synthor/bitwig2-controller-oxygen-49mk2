@@ -1,4 +1,5 @@
 package com.maudio;
+
 import java.util.UUID;
 
 import com.bitwig.extension.api.PlatformType;

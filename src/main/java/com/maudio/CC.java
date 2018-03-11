@@ -1,6 +1,7 @@
 package com.maudio;
 
-public class CC {
+public class CC
+{
     static final int LOWEST_CC           = 2;
     static final int HIGHEST_CC          = 119;
     

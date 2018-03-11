@@ -73,12 +73,14 @@ public class Oxygen49Extension extends ControllerExtension
     }
     
     // Returns true if the given index is in the device's cc range or false if not
-    private Boolean isIndexInDeviceCCRange( int index ) {
+    private Boolean isIndexInDeviceCCRange( int index )
+    {
         return index >= CC.DEVICE_START_CC && index <= CC.DEVICE_END_CC;
     }
     
     // Returns the user index from the given cc value
-    private int userIndexFromCC( int cc ) {
+    private int userIndexFromCC( int cc )
+    {
         if( cc > CC.DEVICE_END_CC ) {
             return cc - CC.LOWEST_CC - 8;
         }
@@ -87,15 +89,105 @@ public class Oxygen49Extension extends ControllerExtension
     }
     
     // MIDI-Callback
-    private void onMidi0( ShortMidiMessage msg ) {
-        getHost().println("Somehow triggered a midi: " + msg.getStatusByte() + " (getStatusByte)");
-        getHost().println("Somehow triggered a midi: " + msg.getData1() + " (getData1)");
-        getHost().println("Somehow triggered a midi: " + msg.getData2() + " (getData2)");
-        getHost().println("Somehow triggered a midi: " + msg.getChannel() + " (getChannel)");
+    private void onMidi0( ShortMidiMessage msg )
+    {
+        int data1 = msg.getData1();
+        int data2 = msg.getData2();
+        int status = msg.getStatusByte();
+        
+        if( status == ShortMidiMessage.CONTROL_CHANGE )
+        {
+            if( isIndexInDeviceCCRange(data1) )
+            {
+                int index = -1;
+                
+                if( data1 == 75) { index = 0; }
+                if( data1 == 76) { index = 1; }
+                if( data1 == 92) { index = 2; }
+                if( data1 == 95) { index = 3; }
+                if( data1 == 10) { index = 4; }
+                if( data1 == 77) { index = 5; }
+                if( data1 == 78) { index = 6; }
+                if( data1 == 79) { index = 7; }
+                
+                if( index > -1 ) 
+                {
+                    this.remotecontrols.getParameter(index).value().set(data2, 128);
+                }
+                // Handle transport-buttons and trackselection
+                else if( (data1 >= CC.PREV_TRACK && data1 <= CC.RECORD && data1 != 112) && 
+                          data2 > 0 )
+                {
+                    switch( data1 ) {
+                        case CC.PREV_TRACK:
+                            this.cursortrack.selectPrevious();
+                            break;
+                        case CC.NEXT_TRACK:
+                            this.cursortrack.selectNext();
+                            break;
+                        case CC.LOOP:
+                            this.transport.toggleLoop();
+                            break;
+                        case CC.REWIND:
+                            this.transport.rewind();
+                            break;
+                        case CC.FORWARD:
+                            this.transport.fastForward();
+                            break;
+                        case CC.STOP:
+                            this.transport.stop();
+                            break;
+                        case CC.PLAY:
+                            this.transport.play();
+                            break;
+                        case CC.RECORD:
+                            this.transport.record();
+                            break;
+                    }
+                }
+                else if( data1 >= CC.LOWEST_CC && data1 <= CC.HIGHEST_CC )
+                {
+                    // Handle slider as trackvolume
+                    if( data1 == CC.SLIDER )
+                    {
+                        this.cursortrack.getVolume().set(data2, 128);
+                    }
+                    else
+                    {
+                        // Handle CC 02-119
+                        if( data1 >= CC.LOWEST_CC && data1 <= CC.HIGHEST_CC )
+                        {
+                            int userindex = userIndexFromCC(data1);
+                            this.usercontrols.getControl(userindex).value().set(data2, 128);
+                        }
+                    }
+                }
+            }
+        }
     }
     
     // SysEx-Callback
-    private void onSysex0( final String data ) {
+    private void onSysex0( final String data )
+    {
         getHost().println("Somehow triggered a sysex: " + data);
+        
+        // MMC Transport Controls:
+        switch( data ) {
+            case "f07f7f0605f7":
+                this.transport.rewind();
+                break;
+            case "f07f7f0604f7":
+                this.transport.fastForward();
+                break;
+            case "f07f7f0601f7":
+                this.transport.stop();
+                break;
+            case "f07f7f0602f7":
+                this.transport.play();
+                break;
+            case "f07f7f0606f7":
+                this.transport.record();
+                break;
+        }
     }
 }
