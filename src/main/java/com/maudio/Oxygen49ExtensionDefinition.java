@@ -55,8 +55,6 @@ public class Oxygen49ExtensionDefinition extends ControllerExtensionDefinition
     @Override
     public int getRequiredAPIVersion()
     {
-        // 6 = ???
-        // 4 = 2.2.x?
         return 4;
     }
 
@@ -75,8 +73,6 @@ public class Oxygen49ExtensionDefinition extends ControllerExtensionDefinition
     @Override
     public void listAutoDetectionMidiPortNames(final AutoDetectionMidiPortNamesList list, final PlatformType platformType)
     {
-        // list.add(new String[]{"Input Port 0", "Input Port -1"}, new String[]{"Output Port 0"});
-        
         switch( platformType )
         {
             case WINDOWS:

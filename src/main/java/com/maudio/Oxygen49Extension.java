@@ -62,21 +62,13 @@ public class Oxygen49Extension extends ControllerExtension
                 this.usercontrols.getControl(index).markInterested();
             }
         }
-
-        host.showPopupNotification("Oxygen49Extension Initialized");
     }
 
     @Override
-    public void exit()
-    {
-        getHost().showPopupNotification("Oxygen49Extension Exited");
-    }
+    public void exit() {}
 
     @Override
-    public void flush()
-    {
-        // TODO Send any updates you need here
-    }
+    public void flush() {}
     
     // Returns true if the given index is in the device's cc range or false if not
     private Boolean isIndexInDeviceCCRange( int index )
@@ -134,7 +126,6 @@ public class Oxygen49Extension extends ControllerExtension
                     this.cursortrack.selectNext();
                     break;
                 case CC.LOOP:
-                    //this.transport.toggleLoop(); // Deprecated
                     this.transport.isArrangerLoopEnabled().toggle();
                     break;
                 case CC.REWIND:
