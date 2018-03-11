@@ -1,6 +1,7 @@
 package com.maudio;
 
 import java.util.UUID;
+import static java.lang.String.format;
 
 import com.bitwig.extension.api.PlatformType;
 import com.bitwig.extension.controller.AutoDetectionMidiPortNamesList;
@@ -54,7 +55,9 @@ public class Oxygen49ExtensionDefinition extends ControllerExtensionDefinition
     @Override
     public int getRequiredAPIVersion()
     {
-        return 6;
+        // 6 = ???
+        // 4 = 2.2.x?
+        return 4;
     }
 
     @Override
@@ -66,7 +69,7 @@ public class Oxygen49ExtensionDefinition extends ControllerExtensionDefinition
     @Override
     public int getNumMidiOutPorts()
     {
-        return 0;
+        return 1;
     }
 
     @Override
@@ -77,13 +80,11 @@ public class Oxygen49ExtensionDefinition extends ControllerExtensionDefinition
         switch( platformType )
         {
             case WINDOWS:
-                // No Windows here. Please add if you want support.
-                break;
             case MAC:
-                // No Mac here. Please add if you want support.
+                list.add(new String[]{"Oxygen 49"}, new String[]{"Oxygen 49"});
+                System.err.println(format("Support for platform '%s' is experimental/untested.", platformType.name()));
                 break;
             case LINUX:
-                list.add(new String[]{"Oxygen 49"}, new String[]{"Oxygen 49"});
                 list.add(new String[]{"Oxygen 49 MIDI 1"}, new String[]{"Oxygen 49 MIDI 1"});
                 break;
         }
