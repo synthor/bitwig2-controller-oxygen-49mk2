@@ -45,7 +45,8 @@ public class Oxygen49Extension extends ControllerExtension
         this.cursordevice = this.cursortrack.createCursorDevice();
         this.remotecontrols = this.cursordevice.createCursorRemoteControlsPage(8);
 
-        for( int i = 0 ; i < 8 ; i++ ) {
+        for( int i = 0 ; i < 8 ; i++ )
+        {
             Parameter p = this.remotecontrols.getParameter(i);
             p.setIndication(true);
             p.setLabel("P" + (i + 1));
@@ -55,8 +56,10 @@ public class Oxygen49Extension extends ControllerExtension
         // Make the rest freely mappable
         this.usercontrols = host.createUserControls(CC.HIGHEST_CC - CC.LOWEST_CC + 1-8);
 
-        for( int i = CC.LOWEST_CC ; i < CC.HIGHEST_CC ; i++ ) {
-            if( !isIndexInDeviceCCRange(i) ) {
+        for( int i = CC.LOWEST_CC ; i < CC.HIGHEST_CC ; i++ )
+        {
+            if( !isIndexInDeviceCCRange(i) )
+            {
                 int index = userIndexFromCC(i);
                 this.usercontrols.getControl(index).setLabel("CC" + i);
                 this.usercontrols.getControl(index).markInterested();
@@ -79,7 +82,8 @@ public class Oxygen49Extension extends ControllerExtension
     // Returns the user index from the given cc value
     private int userIndexFromCC( int cc )
     {
-        if( cc > CC.DEVICE_END_CC ) {
+        if( cc > CC.DEVICE_END_CC )
+        {
             return cc - CC.LOWEST_CC - 8;
         }
         
@@ -89,7 +93,8 @@ public class Oxygen49Extension extends ControllerExtension
     // MIDI-Callback
     private void onMidi0( ShortMidiMessage msg )
     {
-        if( !msg.isControlChange() ) {
+        if( !msg.isControlChange() )
+        {
             return;
         }
         
