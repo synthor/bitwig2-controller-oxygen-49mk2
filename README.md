@@ -13,7 +13,7 @@ Fork or let me know if you find one. Enjoy!
 Download the compiled extension from [here](https://github.com/FIXURL) and put it into your `~/Bitwig Studio/Extensions` folder.
 Note that the `Extensions` path is probably different for Windows or Mac.
 
-## Develoment
+## Development
 
 Just install an IDE of your favour (e.g. Netbeans) and create a project with existing sources.
 
